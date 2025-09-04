@@ -1,11 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 
 import { useAppForm } from '../hooks/demo.form'
 
-export const Route = createFileRoute('/demo/form')({
-  component: SimpleForm,
-})
+import type { RootRoute } from '@tanstack/react-router'
 
 const schema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -63,3 +61,10 @@ function SimpleForm() {
     </div>
   )
 }
+
+export default (parentRoute: RootRoute) =>
+  createRoute({
+    path: '/demo/form/simple',
+    component: SimpleForm,
+    getParentRoute: () => parentRoute,
+  })

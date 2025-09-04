@@ -1,6 +1,6 @@
 {
   "projectName": "finance-tracker-remaster",
-  "mode": "file-router",
+  "mode": "code-router",
   "typescript": true,
   "tailwind": true,
   "packageManager": "npm",
@@ -9,7 +9,6 @@
   "framework": "react-cra",
   "chosenAddOns": [
     "biome",
-    "clerk",
     "form",
     "shadcn",
     "table",

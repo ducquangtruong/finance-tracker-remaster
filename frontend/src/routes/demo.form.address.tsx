@@ -1,10 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createRoute } from '@tanstack/react-router'
 
 import { useAppForm } from '../hooks/demo.form'
 
-export const Route = createFileRoute('/demo/form')({
-  component: AddressForm,
-})
+import type { RootRoute } from '@tanstack/react-router'
 
 function AddressForm() {
   const form = useAppForm({
@@ -198,3 +196,10 @@ function AddressForm() {
     </div>
   )
 }
+
+export default (parentRoute: RootRoute) =>
+  createRoute({
+    path: '/demo/form/address',
+    component: AddressForm,
+    getParentRoute: () => parentRoute,
+  })

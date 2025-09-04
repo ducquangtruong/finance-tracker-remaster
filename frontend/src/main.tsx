@@ -1,16 +1,50 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
+import {
+  Outlet,
+  RouterProvider,
+  createRootRoute,
+  createRoute,
+  createRouter,
+} from '@tanstack/react-router'
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import FormSimpleDemo from './routes/demo.form.simple.tsx'
+import FormAddressDemo from './routes/demo.form.address.tsx'
+import TableDemo from './routes/demo.table.tsx'
+import TanStackQueryDemo from './routes/demo.tanstack-query.tsx'
+
+import Header from './components/Header.tsx'
 
 import * as TanStackQueryProvider from './integrations/tanstack-query/root-provider.tsx'
-
-// Import the generated route tree
-import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 
-// Create a new router instance
+import App from './App.tsx'
+
+const rootRoute = createRootRoute({
+  component: () => (
+    <>
+      <Header />
+      <Outlet />
+      <TanStackRouterDevtools />
+    </>
+  ),
+})
+
+const indexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  component: App,
+})
+
+const routeTree = rootRoute.addChildren([
+  indexRoute,
+  FormSimpleDemo(rootRoute),
+  FormAddressDemo(rootRoute),
+  TableDemo(rootRoute),
+  TanStackQueryDemo(rootRoute),
+])
 
 const TanStackQueryProviderContext = TanStackQueryProvider.getContext()
 const router = createRouter({
@@ -24,14 +58,12 @@ const router = createRouter({
   defaultPreloadStaleTime: 0,
 })
 
-// Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
   }
 }
 
-// Render the app
 const rootElement = document.getElementById('app')
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
